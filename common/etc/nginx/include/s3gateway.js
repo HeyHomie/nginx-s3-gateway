@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-_require_env_var('S3_ACCESS_KEY_ID');
-_require_env_var('S3_SECRET_KEY');
+// _require_env_var('S3_ACCESS_KEY_ID');
+// _require_env_var('S3_SECRET_KEY');
 _require_env_var('S3_BUCKET_NAME');
 _require_env_var('S3_SERVER');
 _require_env_var('S3_SERVER_PROTO');
@@ -225,13 +225,13 @@ function redirectToS3(r) {
     var uriPath = r.variables.uri_path;
     var isDirectoryListing = allow_listing && _isDirectory(uriPath);
 
-    if (isDirectoryListing && r.method === 'GET') {
-        r.internalRedirect("@s3Listing");
-    } else if (!isDirectoryListing && uriPath === '/') {
-        r.internalRedirect("@error404");
-    } else {
+    // if (isDirectoryListing && r.method === 'GET') {
+    //     r.internalRedirect("@s3Listing");
+    // } else if (!isDirectoryListing && uriPath === '/') {
+    //     r.internalRedirect("@error404");
+    // } else {
         r.internalRedirect("@s3");
-    }
+    // }
 }
 
 /**

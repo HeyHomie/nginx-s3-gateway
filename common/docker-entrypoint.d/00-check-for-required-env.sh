@@ -22,15 +22,15 @@ set -e
 
 failed=0
 
-if [ -z ${S3_ACCESS_KEY_ID+x} ]; then
-    >&2 echo "Required S3_ACCESS_KEY_ID environment variable missing"
-    failed=1
-fi
+# if [ -z ${S3_ACCESS_KEY_ID+x} ]; then
+#     >&2 echo "Required S3_ACCESS_KEY_ID environment variable missing"
+#     failed=1
+# fi
 
-if [ -z ${S3_SECRET_KEY+x} ]; then
-    >&2 echo "Required S3_SECRET_KEY environment variable missing"
-    failed=1
-fi
+# if [ -z ${S3_SECRET_KEY+x} ]; then
+#     >&2 echo "Required S3_SECRET_KEY environment variable missing"
+#     failed=1
+# fi
 
 if [ -z ${S3_BUCKET_NAME+x} ]; then
     >&2 echo "Required S3_BUCKET_NAME environment variable missing"
@@ -87,7 +87,7 @@ if [ $failed -gt 0 ]; then
 fi
 
 echo "S3 Backend Environment"
-echo "Access Key ID: ${S3_ACCESS_KEY_ID}"
+# echo "Access Key ID: ${S3_ACCESS_KEY_ID}"
 echo "Origin: ${S3_SERVER_PROTO}://${S3_BUCKET_NAME}.${S3_SERVER}:${S3_SERVER_PORT}"
 echo "Region: ${S3_REGION}"
 echo "Addressing Style: ${S3_STYLE}"
