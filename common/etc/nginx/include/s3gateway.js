@@ -152,7 +152,6 @@ function s3auth(r) {
 
 function s3BaseUri(r) {
     var bucket = process.env['S3_BUCKET_NAME'];
-    var prefix = process.env['PATH_PREFIX'] || '';
     var basePath;
 
     if (s3_style === 'path') {
@@ -160,10 +159,6 @@ function s3BaseUri(r) {
         basePath = '/' + bucket;
     } else {
         basePath = '';
-    }
-
-    if(prefix !== '') {
-        basePath = basePath.replace(prefix, '')
     }
 
     return basePath;
@@ -176,6 +171,7 @@ function s3BaseUri(r) {
  * @returns {string} uri for s3 request
  */
 function s3uri(r) {
+    var prefix = process.env['PATH_PREFIX'] || '';
     var uriPath = r.variables.uri_path;
     var basePath = s3BaseUri(r);
     var path;
@@ -190,6 +186,10 @@ function s3uri(r) {
         }
     } else {
         path = basePath + uriPath;
+    }
+
+    if(prefix !== '') {
+        path = path.replace(prefix, '')
     }
 
     _debug_log(r, 'S3 Request URI: ' + r.method + ' ' + path);
