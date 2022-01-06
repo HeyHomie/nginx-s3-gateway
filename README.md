@@ -50,12 +50,28 @@ docker build -f Dockerfile.oss -t nginx-oss-s3-gateway  .
 
 In order to build the NGINX Plus Docker image, copy your NGINX Plus repository 
 keys (`nginx-repo.crt` and `nginx-repo.key`) into the `plus/etc/ssl/nginx` 
-directory and set the environment variable `NGINX_GPGKEY` with the contents of
-your NGINX GPG key. Then build the container image as follows:
+directory. Then build the container image.
+
+If you are using a version of Docker that supports Buildkit, then you can
+build the image as follows in order to prevent your private keys from
+being stored in the container image.
 
 ```
-export NGINX_GPGKEY=<INSERT GPGKEY HERE>
-docker build -f Dockerfile.plus -t nginx-plus-s3-gateway --build-arg NGINX_GPGKEY .
+DOCKER_BUILDKIT=1 docker build \
+    -f Dockerfile.buildkit.plus \
+    -t nginx-plus-s3-gateway \
+    --secret id=nginx-crt,src=plus/etc/ssl/nginx/nginx-repo.crt \
+    --secret id=nginx-key,src=plus/etc/ssl/nginx/nginx-repo.key \
+    --squash .
+```
+
+Otherwise, if you don't have Buildkit available, then build as follows. If you
+want to remove the private keys from the image, then you may need to do a
+post-build squash operation using a utility like 
+[docker-squash](https://pypi.org/project/docker-squash/).
+
+```
+docker build -f Dockerfile.plus -t nginx-plus-s3-gateway .
 ``` 
 
 ### Configuration
@@ -128,9 +144,7 @@ gateway will not return 200 for valid folders.
 Automated tests require `docker`, `docker-compose`, `curl` and `md5sum` to be
 installed. To run all unit tests and integration tests, run the following command.
 If you invoke the test script with the plus parameter, you will need to add your
-NGINX repository keys to the `plus/etc/ssl/nginx` directory. You will also need
-to pass an additional parameter or set the environment variable `NGINX_GPGKEY`
-with your NGINX Plus GPG key. 
+NGINX repository keys to the `plus/etc/ssl/nginx` directory 
 
 ```
 $ ./test.sh <nginx type - 'oss' or 'plus'>
