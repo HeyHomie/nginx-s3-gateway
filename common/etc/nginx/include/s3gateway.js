@@ -152,6 +152,7 @@ function s3auth(r) {
 
 function s3BaseUri(r) {
     var bucket = process.env['S3_BUCKET_NAME'];
+    var prefix = process.env['PATH_PREFIX'] || '';
     var basePath;
 
     if (s3_style === 'path') {
@@ -159,6 +160,10 @@ function s3BaseUri(r) {
         basePath = '/' + bucket;
     } else {
         basePath = '';
+    }
+
+    if(prefix !== '') {
+        basePath = basePath.replace(prefix, '')
     }
 
     return basePath;
