@@ -192,6 +192,10 @@ function s3uri(r) {
         path = path.replace(prefix, '')
     }
 
+    if(path === "") {
+        path = "/"
+    }
+
     _debug_log(r, 'S3 Request URI: ' + r.method + ' ' + path);
     return path;
 }
